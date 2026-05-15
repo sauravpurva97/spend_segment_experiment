@@ -1,0 +1,206 @@
+2026-05-14 23:41:48 | INFO | Logging to /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/spend_allocation_mvp/segment_experiment_cli/logs/country_source_id_instl_cpa_experiment_2026-05-01_2026-05-02_20260514T181148Z.log
+2026-05-14 23:41:48 | INFO | 
+2026-05-14 23:41:48 | INFO | ================================================================================================
+2026-05-14 23:41:48 | INFO | SEGMENT EXPERIMENT RUN START
+2026-05-14 23:41:48 | INFO | ================================================================================================
+2026-05-14 23:41:48 | INFO | 
+2026-05-14 23:41:48 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:48 | INFO | RUN CONFIG
+2026-05-14 23:41:48 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:48 | INFO | dimensions              : source_id + instl
+2026-05-14 23:41:48 | INFO | goal_type               : CPA
+2026-05-14 23:41:48 | INFO | include_country_code    : True
+2026-05-14 23:41:48 | INFO | start_date              : 2026-05-01
+2026-05-14 23:41:48 | INFO | end_date                : 2026-05-02
+2026-05-14 23:41:48 | INFO | run_spend_query         : True
+2026-05-14 23:41:48 | INFO | attribution_buffer_days : 7
+2026-05-14 23:41:48 | INFO | campaign_batches        : 2
+2026-05-14 23:41:48 | INFO | date_batch_days         : 7
+2026-05-14 23:41:48 | INFO | requested_output_dir    : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment
+2026-05-14 23:41:48 | INFO | actual_output_dir       : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment
+2026-05-14 23:41:48 | INFO | 
+2026-05-14 23:41:48 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:48 | INFO | DATE BATCH PLAN
+2026-05-14 23:41:48 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:48 | INFO | count      : 1
+2026-05-14 23:41:48 | INFO | batch_days : 7
+2026-05-14 23:41:49 | INFO | 
+2026-05-14 23:41:49 | INFO | ================================================================================================
+2026-05-14 23:41:49 | INFO | RAW DATA COLLECTION
+2026-05-14 23:41:49 | INFO | ================================================================================================
+2026-05-14 23:41:49 | INFO | 
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:49 | INFO | BATCH 1/2 | DATE BATCH 1/1
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:49 | INFO | dimensions           : source_id + instl
+2026-05-14 23:41:49 | INFO | goal_type            : CPA
+2026-05-14 23:41:49 | INFO | include_country_code : True
+2026-05-14 23:41:49 | INFO | bid_window           : 2026-05-01-00 -> 2026-05-02-23
+2026-05-14 23:41:49 | INFO | event_window         : 2026-05-01-00 -> 2026-05-09-23
+2026-05-14 23:41:49 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/raw_batches/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_0_date_batch_0_2026-05-01_2026-05-02.csv
+2026-05-14 23:41:49 | INFO | 
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:49 | INFO | SQL QUERY | saved_to=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/sql/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_0_date_batch_0.sql
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:49 | INFO | 
+WITH campaign_data AS (
+    SELECT
+        id AS campaign_id,
+        application_id,
+        MAP(
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.event_id') AS INT)),
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.weight') AS DOUBLE))
+        ) AS event_weights
+    FROM mysql.ruby3.campaigns c
+    WHERE goal_type = 'CPA'
+        AND MOD(c.id, 2) = 0
+),
+event_counts AS (
+    SELECT
+        evs.campaign_id,
+        evs.trans_id,
+        SUM(element_at(cd.event_weights, evs.event_id)) AS event_total
+    FROM dw.events evs
+    JOIN campaign_data cd ON evs.campaign_id = cd.campaign_id
+    WHERE evs.dt BETWEEN '2026-05-01-00' AND '2026-05-09-23'
+        AND element_at(cd.event_weights, evs.event_id) IS NOT NULL
+    GROUP BY 1, 2
+)
+SELECT
+    substring(imp.dt, 1, 10) AS day,
+    element_at(imp.bid_request_info, 'ctry2') AS country_code,
+                CAST(imp.source_id AS varchar) AS source_id,
+                CAST(element_at(imp.impression_args, 'instl') AS varchar) AS instl,
+    imp.campaign_id,
+    imp.app_id,
+    SUM(imp.impression_price * (1 + imp.fee) / 1000) AS spend,
+    SUM(evs.event_total) AS goal_events,
+    COUNT(imp.trans_id) AS impressions,
+    COUNT(DISTINCT imp.device_id) AS imp_devices
+FROM dw.enriched_impressions imp
+LEFT JOIN event_counts evs ON imp.trans_id = evs.trans_id
+WHERE imp.dt BETWEEN '2026-05-01-00' AND '2026-05-02-23'
+    AND imp.campaign_id IN (SELECT campaign_id FROM campaign_data)
+    AND imp.source_id IS NOT NULL AND element_at(imp.impression_args, 'instl') IS NOT NULL
+GROUP BY 1, 2, 3, 4, 5, 6
+ORDER BY 1, 5, spend DESC
+2026-05-14 23:41:49 | INFO | 
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 23:41:49 | INFO | QUERY EXECUTION START
+2026-05-14 23:41:49 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | 
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | BATCH COMPLETE
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | rows            : 5495
+2026-05-14 18:23:38 | INFO | runtime_seconds : 708.79
+2026-05-14 18:23:38 | INFO | output_csv      : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/raw_batches/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_0_date_batch_0_2026-05-01_2026-05-02.csv
+2026-05-14 18:23:38 | INFO | 
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | BATCH 2/2 | DATE BATCH 1/1
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | dimensions           : source_id + instl
+2026-05-14 18:23:38 | INFO | goal_type            : CPA
+2026-05-14 18:23:38 | INFO | include_country_code : True
+2026-05-14 18:23:38 | INFO | bid_window           : 2026-05-01-00 -> 2026-05-02-23
+2026-05-14 18:23:38 | INFO | event_window         : 2026-05-01-00 -> 2026-05-09-23
+2026-05-14 18:23:38 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/raw_batches/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_1_date_batch_0_2026-05-01_2026-05-02.csv
+2026-05-14 18:23:38 | INFO | 
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | SQL QUERY | saved_to=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/sql/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_1_date_batch_0.sql
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | 
+WITH campaign_data AS (
+    SELECT
+        id AS campaign_id,
+        application_id,
+        MAP(
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.event_id') AS INT)),
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.weight') AS DOUBLE))
+        ) AS event_weights
+    FROM mysql.ruby3.campaigns c
+    WHERE goal_type = 'CPA'
+        AND MOD(c.id, 2) = 1
+),
+event_counts AS (
+    SELECT
+        evs.campaign_id,
+        evs.trans_id,
+        SUM(element_at(cd.event_weights, evs.event_id)) AS event_total
+    FROM dw.events evs
+    JOIN campaign_data cd ON evs.campaign_id = cd.campaign_id
+    WHERE evs.dt BETWEEN '2026-05-01-00' AND '2026-05-09-23'
+        AND element_at(cd.event_weights, evs.event_id) IS NOT NULL
+    GROUP BY 1, 2
+)
+SELECT
+    substring(imp.dt, 1, 10) AS day,
+    element_at(imp.bid_request_info, 'ctry2') AS country_code,
+                CAST(imp.source_id AS varchar) AS source_id,
+                CAST(element_at(imp.impression_args, 'instl') AS varchar) AS instl,
+    imp.campaign_id,
+    imp.app_id,
+    SUM(imp.impression_price * (1 + imp.fee) / 1000) AS spend,
+    SUM(evs.event_total) AS goal_events,
+    COUNT(imp.trans_id) AS impressions,
+    COUNT(DISTINCT imp.device_id) AS imp_devices
+FROM dw.enriched_impressions imp
+LEFT JOIN event_counts evs ON imp.trans_id = evs.trans_id
+WHERE imp.dt BETWEEN '2026-05-01-00' AND '2026-05-02-23'
+    AND imp.campaign_id IN (SELECT campaign_id FROM campaign_data)
+    AND imp.source_id IS NOT NULL AND element_at(imp.impression_args, 'instl') IS NOT NULL
+GROUP BY 1, 2, 3, 4, 5, 6
+ORDER BY 1, 5, spend DESC
+2026-05-14 18:23:38 | INFO | 
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:23:38 | INFO | QUERY EXECUTION START
+2026-05-14 18:23:38 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:44 | INFO | 
+2026-05-14 18:34:44 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:44 | INFO | BATCH COMPLETE
+2026-05-14 18:34:44 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:44 | INFO | rows            : 5510
+2026-05-14 18:34:44 | INFO | runtime_seconds : 666.55
+2026-05-14 18:34:44 | INFO | output_csv      : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/raw_batches/cpa_source_id_instl_2026-05-01_2026-05-02_campaign_batch_1_date_batch_0_2026-05-01_2026-05-02.csv
+2026-05-14 18:34:44 | INFO | 
+2026-05-14 18:34:44 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:44 | INFO | RAW DATA WRITTEN
+2026-05-14 18:34:44 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:44 | INFO | rows : 11005
+2026-05-14 18:34:44 | INFO | file : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_raw.csv
+2026-05-14 18:34:44 | INFO | 
+2026-05-14 18:34:44 | INFO | ================================================================================================
+2026-05-14 18:34:44 | INFO | ANALYSIS
+2026-05-14 18:34:44 | INFO | ================================================================================================
+2026-05-14 18:34:44 | INFO | Removed single-segment campaigns | count=1
+2026-05-14 18:34:45 | INFO | Analysis complete | raw_rows=11005 | paid_rows=9434 | segments=4166 | flagged_segments=0 | flagged_campaigns=0
+2026-05-14 18:34:45 | INFO | 
+2026-05-14 18:34:45 | INFO | ================================================================================================
+2026-05-14 18:34:45 | INFO | OUTPUT WRITES
+2026-05-14 18:34:45 | INFO | ================================================================================================
+2026-05-14 18:34:45 | INFO | Output written | name=segments | rows=4166 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_segments.csv
+2026-05-14 18:34:45 | INFO | Output written | name=experiment_segments | rows=0 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_experiment_segments.csv
+2026-05-14 18:34:45 | INFO | Output written | name=experiment_campaigns | rows=0 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_experiment_campaigns.csv
+2026-05-14 18:34:45 | INFO | Output written | name=weekly_summary | rows=1 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_weekly_summary.csv
+2026-05-14 18:34:45 | INFO | Output written | name=worst_campaign_segment_summary | rows=0 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_worst_campaign_segment_summary.csv
+2026-05-14 18:34:45 | INFO | Output written | name=threshold_backtest | rows=216 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_threshold_backtest.csv
+2026-05-14 18:34:45 | INFO | Output written | name=recommended_thresholds | rows=1 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_recommended_thresholds.csv
+2026-05-14 18:34:45 | INFO | Output written | name=run_summary | rows=1 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_run_summary.csv
+2026-05-14 18:34:45 | INFO | Config written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/cpa_source_id_instl_2026-05-01_2026-05-02_config.json
+2026-05-14 18:34:45 | INFO | 
+2026-05-14 18:34:45 | INFO | ================================================================================================
+2026-05-14 18:34:45 | INFO | VISUALIZATIONS
+2026-05-14 18:34:45 | INFO | ================================================================================================
+2026-05-14 18:34:46 | INFO | Visualization written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/visualizations/cpa_source_id_instl_2026-05-01_2026-05-02_weekly_spend_vs_events.png
+2026-05-14 18:34:46 | INFO | Visualization export complete | count=1 | dir=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/visualizations
+2026-05-14 18:34:46 | INFO | 
+2026-05-14 18:34:46 | INFO | ================================================================================================
+2026-05-14 18:34:46 | INFO | REPORT
+2026-05-14 18:34:46 | INFO | ================================================================================================
+2026-05-14 18:34:46 | INFO | Experiment report written | markdown=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/reports/cpa_source_id_instl_2026-05-01_2026-05-02_experiment_report.md | html=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/reports/cpa_source_id_instl_2026-05-01_2026-05-02_experiment_report.html
+2026-05-14 18:34:46 | INFO | Google Docs import source ready | use Google Drive native import on the HTML file for doc creation | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment/reports/cpa_source_id_instl_2026-05-01_2026-05-02_experiment_report.html
+2026-05-14 18:34:46 | INFO | 
+2026-05-14 18:34:46 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:46 | INFO | RUN COMPLETE
+2026-05-14 18:34:46 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-14 18:34:46 | INFO | output_dir : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_source_id_instl_cpa_experiment
