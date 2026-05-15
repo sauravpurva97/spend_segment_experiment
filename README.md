@@ -69,11 +69,11 @@ python /path/to/spend_segment_experiment/run.py \
 
 If `--output_root` is not passed, outputs are created under
 `<spend_segment_experiment>/../../result_files/spend_allocation_mvp`; directories
-are created automatically when the user has write permission.
+are created automatically when you has write permission.
 
 Logs are created automatically under `<spend_segment_experiment>/logs`.
 
-Parameters they usually need to change:
+Parameters you usually need to change:
 
 | Parameter | What to pass |
 | --- | --- |
@@ -87,7 +87,7 @@ Parameters they usually need to change:
 | `--presto_server` | Presto server name, usually `data`. |
 | `--output_root` | Root folder where experiment output directories should be created. |
 
-They also need warehouse access to:
+You also need warehouse access to:
 
 - `mysql.ruby3.campaigns`
 - `dw.enriched_impressions`
@@ -95,7 +95,7 @@ They also need warehouse access to:
 - `dw.installs` for CPI
 
 The output directory is created automatically if it does not exist, as long as
-the user has write permission to the repo/output path.
+you have the write permission to the repo/output path.
 
 ## Available Dimensions
 
