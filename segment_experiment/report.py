@@ -4,6 +4,7 @@ from html import escape
 from datetime import timedelta
 
 import pandas as pd
+import math
 
 from .config import RunConfig
 
@@ -60,6 +61,16 @@ def _fmt_money(value) -> str:
         return "$0"
 
 
+def _fmt_efficiency(value) -> str:
+    try:
+        numeric = float(value)
+        if math.isinf(numeric):
+            return "Inf"
+        return f"${numeric:,.2f}"
+    except Exception:
+        return "$0.00"
+
+
 def _fmt_pct(value) -> str:
     try:
         return f"{float(value):.1f}%"
@@ -67,9 +78,19 @@ def _fmt_pct(value) -> str:
         return "0.0%"
 
 
+def _metric_label(config: RunConfig) -> str:
+    return "Installs" if config.goal_type == "CPI" else "Events"
+
+
+def _efficiency_label(config: RunConfig) -> str:
+    return "CPI" if config.goal_type == "CPI" else "CPA"
+
+
 def _build_markdown(title: str, segment_definition: str, summary: dict, top_campaigns: pd.DataFrame, config: RunConfig) -> str:
     t = config.thresholds
     event_end = config.end_date + timedelta(days=config.attribution_buffer_for_events)
+    metric_label = _metric_label(config)
+    efficiency_label = _efficiency_label(config)
     lines = [
         f"# {title}",
         "",
@@ -137,7 +158,20 @@ def _build_markdown(title: str, segment_definition: str, summary: dict, top_camp
         "",
         "# Proposed Experiment: Top 5 Campaigns",
         "",
-        _campaign_table_markdown(top_campaigns),
+        _campaign_table_markdown(top_campaigns, config),
+        "",
+        "---",
+        "",
+        "# Assumptions",
+        "",
+        f"- Estimated {efficiency_label} lift is directional, not causal.",
+        "- Cut-only math assumes segment spend and attributed conversions decline linearly with the applied cut ratio.",
+        f"- Reallocation math assumes saved spend can be reallocated into the rest of the campaign at the remaining campaign {efficiency_label}.",
+        f"- Targeted segment {efficiency_label} is computed from spend and attributed {metric_label.lower()} observed in the analysis window.",
+        "- No auction, pacing, or learning effects are modeled.",
+        "- Segment quality is assumed stable over the analysis period and immediately after intervention.",
+        f"- Attribution uses the configured {config.attribution_buffer_for_events}-day lag window, so reported {metric_label.lower()} are attributed, not necessarily realized in-period outcomes.",
+        "- Interaction effects across segments are not modeled; each recommendation is evaluated against its campaign baseline.",
         "",
         "---",
         "",
@@ -177,7 +211,7 @@ def _build_html(title: str, segment_definition: str, summary: dict, top_campaign
             body.append(f"<p>{escape(line)}</p>")
     if in_ul:
         body.append("</ul>")
-    body.append(_campaign_table_html(top_campaigns))
+    body.append(_campaign_table_html(top_campaigns, config))
     return """<!doctype html>
 <html>
 <head>
@@ -195,8 +229,21 @@ def _build_html(title: str, segment_definition: str, summary: dict, top_campaign
 """ + "\n".join(body) + "\n</body>\n</html>\n"
 
 
-def _campaign_table_markdown(df: pd.DataFrame) -> str:
-    headers = ["Campaign", "Segments", "Action", "Targeted Spend", "Targeted Events", "Est. CPA Lift"]
+def _campaign_table_markdown(df: pd.DataFrame, config: RunConfig) -> str:
+    metric_label = _metric_label(config)
+    efficiency_label = _efficiency_label(config)
+    headers = [
+        "Campaign",
+        "Segments",
+        "Action",
+        "Period Segment Spend",
+        f"Period Segment {metric_label}",
+        f"Period Segment {efficiency_label}",
+        "Saved Spend",
+        f"Reduced {metric_label}",
+        f"Targeted {efficiency_label}",
+        f"Est. {efficiency_label} Lift",
+    ]
     if df is None or df.empty:
         return "No campaigns met the experiment criteria."
     rows = ["| " + " | ".join(headers) + " |", "| " + " | ".join(["---"] * len(headers)) + " |"]
@@ -208,8 +255,12 @@ def _campaign_table_markdown(df: pd.DataFrame) -> str:
                     str(getattr(row, "campaign_id")),
                     str(getattr(row, "segment_values", "")),
                     "Cut recommended segments",
-                    _fmt_pct(getattr(row, "targeted_spend_pct", 0)),
-                    _fmt_pct(getattr(row, "targeted_event_pct", 0)),
+                    _fmt_money(getattr(row, "targeted_spend", 0)),
+                    _fmt_int(getattr(row, "targeted_events", 0)),
+                    _fmt_efficiency(getattr(row, "targeted_cpa", 0)),
+                    _fmt_money(getattr(row, "saved_spend", 0)),
+                    _fmt_int(getattr(row, "lost_events", 0)),
+                    _fmt_efficiency(getattr(row, "current_cpa", 0)),
                     _fmt_pct(getattr(row, "cpa_improvement_pct_realloc", 0)),
                 ]
             )
@@ -218,13 +269,26 @@ def _campaign_table_markdown(df: pd.DataFrame) -> str:
     return "\n".join(rows)
 
 
-def _campaign_table_html(df: pd.DataFrame) -> str:
+def _campaign_table_html(df: pd.DataFrame, config: RunConfig) -> str:
     if df is None or df.empty:
         return ""
+    metric_label = _metric_label(config)
+    efficiency_label = _efficiency_label(config)
     rows = [
         "<h1>Proposed Experiment Table</h1>",
         "<table>",
-        "<tr><th>Campaign</th><th>Segments</th><th>Action</th><th>Targeted Spend</th><th>Targeted Events</th><th>Est. CPA Lift</th></tr>",
+        "<tr>"
+        "<th>Campaign</th>"
+        "<th>Segments</th>"
+        "<th>Action</th>"
+        "<th>Period Segment Spend</th>"
+        f"<th>Period Segment {escape(metric_label)}</th>"
+        f"<th>Period Segment {escape(efficiency_label)}</th>"
+        "<th>Saved Spend</th>"
+        f"<th>Reduced {escape(metric_label)}</th>"
+        f"<th>Targeted {escape(efficiency_label)}</th>"
+        f"<th>Est. {escape(efficiency_label)} Lift</th>"
+        "</tr>",
     ]
     for row in df.head(5).itertuples(index=False):
         rows.append(
@@ -232,8 +296,12 @@ def _campaign_table_html(df: pd.DataFrame) -> str:
             f"<td>{escape(str(getattr(row, 'campaign_id')))}</td>"
             f"<td>{escape(str(getattr(row, 'segment_values', '')))}</td>"
             "<td>Cut recommended segments</td>"
-            f"<td>{escape(_fmt_pct(getattr(row, 'targeted_spend_pct', 0)))}</td>"
-            f"<td>{escape(_fmt_pct(getattr(row, 'targeted_event_pct', 0)))}</td>"
+            f"<td>{escape(_fmt_money(getattr(row, 'targeted_spend', 0)))}</td>"
+            f"<td>{escape(_fmt_int(getattr(row, 'targeted_events', 0)))}</td>"
+            f"<td>{escape(_fmt_efficiency(getattr(row, 'targeted_cpa', 0)))}</td>"
+            f"<td>{escape(_fmt_money(getattr(row, 'saved_spend', 0)))}</td>"
+            f"<td>{escape(_fmt_int(getattr(row, 'lost_events', 0)))}</td>"
+            f"<td>{escape(_fmt_efficiency(getattr(row, 'current_cpa', 0)))}</td>"
             f"<td>{escape(_fmt_pct(getattr(row, 'cpa_improvement_pct_realloc', 0)))}</td>"
             "</tr>"
         )

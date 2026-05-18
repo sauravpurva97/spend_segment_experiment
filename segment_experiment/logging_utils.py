@@ -8,7 +8,8 @@ from pathlib import Path
 
 def setup_logging(log_dir: Path, run_key: str) -> logging.Logger:
     log_dir.mkdir(parents=True, exist_ok=True)
-    log_path = log_dir / f"{run_key}_{datetime.utcnow():%Y%m%dT%H%M%SZ}.log"
+    timestamp = datetime.now().strftime("%Y-%m-%d__%H-%M-%S-%f")[:-3]
+    log_path = log_dir / f"{run_key}_{timestamp}.log"
 
     logger = logging.getLogger("segment_experiment")
     logger.setLevel(logging.INFO)

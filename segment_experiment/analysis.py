@@ -9,6 +9,12 @@ from .config import RunConfig
 from .dimensions import segment_columns
 
 
+def _format_rounded(series: pd.Series, decimals: int) -> pd.Series:
+    numeric = pd.to_numeric(series, errors="coerce")
+    rounded = numeric.round(decimals)
+    return rounded.where(~rounded.isna(), np.nan).astype(str)
+
+
 def _clean_raw(raw: pd.DataFrame, config: RunConfig, seg_cols: list[str]) -> pd.DataFrame:
     paid = raw.copy()
     paid["day"] = pd.to_datetime(paid["day"])
@@ -188,13 +194,13 @@ def _build_experiment_outputs(seg: pd.DataFrame, seg_cols: list[str], config: Ru
 
     experiment["proof"] = (
         "spend_share="
-        + experiment["spend_share_pct"].round(1).astype(str)
+        + _format_rounded(experiment["spend_share_pct"], 1)
         + "%, event_share="
-        + experiment["event_share_pct"].round(1).astype(str)
+        + _format_rounded(experiment["event_share_pct"], 1)
         + "%, cpa_ratio="
-        + experiment["cpa_ratio"].round(2).astype(str)
+        + _format_rounded(experiment["cpa_ratio"], 2)
         + "x, smoothed_rate_ratio="
-        + experiment["smoothed_rate_ratio"].round(2).astype(str)
+        + _format_rounded(experiment["smoothed_rate_ratio"], 2)
         + "x, bad_days="
         + experiment["bad_days"].astype(int).astype(str)
         + "/"
@@ -244,6 +250,7 @@ def _build_experiment_outputs(seg: pd.DataFrame, seg_cols: list[str], config: Ru
     campaign_action["targeted_event_pct"] = 100 * campaign_action["targeted_events"] / campaign_action["total_events"].replace(
         0, np.nan
     )
+    campaign_action["targeted_cpa"] = campaign_action["targeted_spend"] / campaign_action["targeted_events"].replace(0, np.nan)
     campaign_action["spend_reduction_pct"] = 100 * campaign_action["saved_spend"] / campaign_action["total_spend"].replace(
         0, np.nan
     )

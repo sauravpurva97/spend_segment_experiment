@@ -1,0 +1,157 @@
+2026-05-17 03:35:34 | INFO | Logging to /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/spend_allocation_mvp/spend_segment_experiment/logs/country_wait_cpa_experiment_2026-05-01_2026-05-30_20260516T220534Z.log
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ================================================================================================
+2026-05-17 03:35:34 | INFO | SEGMENT EXPERIMENT RUN START
+2026-05-17 03:35:34 | INFO | ================================================================================================
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | RUN CONFIG
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | dimensions              : wait
+2026-05-17 03:35:34 | INFO | goal_type               : CPA
+2026-05-17 03:35:34 | INFO | include_country_code    : True
+2026-05-17 03:35:34 | INFO | start_date              : 2026-05-01
+2026-05-17 03:35:34 | INFO | end_date                : 2026-05-30
+2026-05-17 03:35:34 | INFO | run_spend_query         : True
+2026-05-17 03:35:34 | INFO | attribution_buffer_days : 7
+2026-05-17 03:35:34 | INFO | campaign_batches        : 2
+2026-05-17 03:35:34 | INFO | date_batch_days         : 7
+2026-05-17 03:35:34 | INFO | requested_output_dir    : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment
+2026-05-17 03:35:34 | INFO | actual_output_dir       : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | DATE BATCH PLAN
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | count      : 5
+2026-05-17 03:35:34 | INFO | batch_days : 7
+2026-05-17 03:35:34 | INFO | Run request manifest written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/_run_request.json
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ================================================================================================
+2026-05-17 03:35:34 | INFO | RAW DATA COLLECTION
+2026-05-17 03:35:34 | INFO | ================================================================================================
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | BATCH 1/2 | DATE BATCH 1/5
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | dimensions           : wait
+2026-05-17 03:35:34 | INFO | goal_type            : CPA
+2026-05-17 03:35:34 | INFO | include_country_code : True
+2026-05-17 03:35:34 | INFO | bid_window           : 2026-05-01-00 -> 2026-05-07-23
+2026-05-17 03:35:34 | INFO | event_window         : 2026-05-01-00 -> 2026-05-14-23
+2026-05-17 03:35:34 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | SQL QUERY | saved_to=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/sql/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0.sql
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | 
+WITH campaign_data AS (
+    SELECT
+        id AS campaign_id,
+        application_id,
+        MAP(
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.event_id') AS INT)),
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.weight') AS DOUBLE))
+        ) AS event_weights
+    FROM mysql.ruby3.campaigns c
+    WHERE goal_type = 'CPA'
+        AND MOD(c.id, 2) = 0
+),
+event_counts AS (
+    SELECT
+        evs.campaign_id,
+        evs.trans_id,
+        SUM(element_at(cd.event_weights, evs.event_id)) AS event_total
+    FROM dw.events evs
+    JOIN campaign_data cd ON evs.campaign_id = cd.campaign_id
+    WHERE evs.dt BETWEEN '2026-05-01-00' AND '2026-05-14-23'
+        AND element_at(cd.event_weights, evs.event_id) IS NOT NULL
+    GROUP BY 1, 2
+)
+SELECT
+    substring(imp.dt, 1, 10) AS day,
+    element_at(imp.bid_request_info, 'ctry2') AS country_code,
+                CAST(element_at(imp.impression_args, 'w') AS varchar) AS wait,
+    imp.campaign_id,
+    imp.app_id,
+    SUM(imp.impression_price * (1 + imp.fee) / 1000) AS spend,
+    SUM(evs.event_total) AS goal_events,
+    COUNT(imp.trans_id) AS impressions,
+    COUNT(DISTINCT imp.device_id) AS imp_devices
+FROM dw.enriched_impressions imp
+LEFT JOIN event_counts evs ON imp.trans_id = evs.trans_id
+WHERE imp.dt BETWEEN '2026-05-01-00' AND '2026-05-07-23'
+    AND imp.campaign_id IN (SELECT campaign_id FROM campaign_data)
+    AND element_at(imp.impression_args, 'w') IS NOT NULL
+GROUP BY 1, 2, 3, 4, 5
+ORDER BY 1, 4, spend DESC
+2026-05-17 03:35:34 | INFO | 
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 03:35:34 | INFO | QUERY EXECUTION START
+2026-05-17 03:35:34 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | 
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | BATCH COMPLETE
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | rows              : 58874
+2026-05-16 22:46:08 | INFO | runtime_seconds   : 2433.29
+2026-05-16 22:46:08 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-16 22:46:08 | INFO | used_existing_csv : False
+2026-05-16 22:46:08 | INFO | 
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | BATCH 1/2 | DATE BATCH 2/5
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | dimensions           : wait
+2026-05-16 22:46:08 | INFO | goal_type            : CPA
+2026-05-16 22:46:08 | INFO | include_country_code : True
+2026-05-16 22:46:08 | INFO | bid_window           : 2026-05-08-00 -> 2026-05-14-23
+2026-05-16 22:46:08 | INFO | event_window         : 2026-05-08-00 -> 2026-05-21-23
+2026-05-16 22:46:08 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-16 22:46:08 | INFO | 
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | SQL QUERY | saved_to=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/sql/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_1.sql
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | 
+WITH campaign_data AS (
+    SELECT
+        id AS campaign_id,
+        application_id,
+        MAP(
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.event_id') AS INT)),
+            TRANSFORM(CAST(goal_events AS ARRAY(JSON)), x -> CAST(JSON_EXTRACT(x, '$.weight') AS DOUBLE))
+        ) AS event_weights
+    FROM mysql.ruby3.campaigns c
+    WHERE goal_type = 'CPA'
+        AND MOD(c.id, 2) = 0
+),
+event_counts AS (
+    SELECT
+        evs.campaign_id,
+        evs.trans_id,
+        SUM(element_at(cd.event_weights, evs.event_id)) AS event_total
+    FROM dw.events evs
+    JOIN campaign_data cd ON evs.campaign_id = cd.campaign_id
+    WHERE evs.dt BETWEEN '2026-05-08-00' AND '2026-05-21-23'
+        AND element_at(cd.event_weights, evs.event_id) IS NOT NULL
+    GROUP BY 1, 2
+)
+SELECT
+    substring(imp.dt, 1, 10) AS day,
+    element_at(imp.bid_request_info, 'ctry2') AS country_code,
+                CAST(element_at(imp.impression_args, 'w') AS varchar) AS wait,
+    imp.campaign_id,
+    imp.app_id,
+    SUM(imp.impression_price * (1 + imp.fee) / 1000) AS spend,
+    SUM(evs.event_total) AS goal_events,
+    COUNT(imp.trans_id) AS impressions,
+    COUNT(DISTINCT imp.device_id) AS imp_devices
+FROM dw.enriched_impressions imp
+LEFT JOIN event_counts evs ON imp.trans_id = evs.trans_id
+WHERE imp.dt BETWEEN '2026-05-08-00' AND '2026-05-14-23'
+    AND imp.campaign_id IN (SELECT campaign_id FROM campaign_data)
+    AND element_at(imp.impression_args, 'w') IS NOT NULL
+GROUP BY 1, 2, 3, 4, 5
+ORDER BY 1, 4, spend DESC
+2026-05-16 22:46:08 | INFO | 
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-16 22:46:08 | INFO | QUERY EXECUTION START
+2026-05-16 22:46:08 | INFO | ------------------------------------------------------------------------------------------------

@@ -69,9 +69,13 @@ python /path/to/spend_segment_experiment/run.py \
 
 If `--output_root` is not passed, outputs are created under
 `<spend_segment_experiment>/../../result_files/spend_allocation_mvp`; directories
-are created automatically when you has write permission.
+are created automatically when you have write permission.
 
 Logs are created automatically under `<spend_segment_experiment>/logs`.
+
+If a run stops midway and you rerun the exact same config with
+`--run_spend_query_flag true`, the CLI reuses any raw batch CSVs that already
+exist in that experiment directory and only executes the missing batches.
 
 Parameters you usually need to change:
 

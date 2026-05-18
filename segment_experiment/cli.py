@@ -141,9 +141,10 @@ def main(argv: list[str] | None = None) -> int:
         log_key_values(logger, "DATE BATCH PLAN", {"count": len(date_batches), "batch_days": config.batch_days})
 
         from .analysis import analyze
-        from .outputs import write_outputs
+        from .outputs import write_outputs, write_run_request_manifest
         from .query_runner import run_or_load_raw_data
 
+        write_run_request_manifest(config, logger)
         raw = run_or_load_raw_data(config, date_batches, logger)
         log_section(logger, "ANALYSIS")
         outputs = analyze(raw, config, logger)

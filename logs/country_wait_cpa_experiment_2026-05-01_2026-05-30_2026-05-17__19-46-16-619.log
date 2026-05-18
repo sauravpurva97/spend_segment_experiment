@@ -1,0 +1,305 @@
+2026-05-17 19:46:16 | INFO | Logging to /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/spend_allocation_mvp/spend_segment_experiment/logs/country_wait_cpa_experiment_2026-05-01_2026-05-30_2026-05-17__19-46-16-619.log
+2026-05-17 19:46:16 | INFO | 
+2026-05-17 19:46:16 | INFO | ================================================================================================
+2026-05-17 19:46:16 | INFO | SEGMENT EXPERIMENT RUN START
+2026-05-17 19:46:16 | INFO | ================================================================================================
+2026-05-17 19:46:16 | INFO | 
+2026-05-17 19:46:16 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:16 | INFO | RUN CONFIG
+2026-05-17 19:46:16 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:16 | INFO | dimensions              : wait
+2026-05-17 19:46:16 | INFO | goal_type               : CPA
+2026-05-17 19:46:16 | INFO | include_country_code    : True
+2026-05-17 19:46:16 | INFO | start_date              : 2026-05-01
+2026-05-17 19:46:16 | INFO | end_date                : 2026-05-30
+2026-05-17 19:46:16 | INFO | run_spend_query         : True
+2026-05-17 19:46:16 | INFO | attribution_buffer_days : 7
+2026-05-17 19:46:16 | INFO | campaign_batches        : 2
+2026-05-17 19:46:16 | INFO | date_batch_days         : 7
+2026-05-17 19:46:16 | INFO | requested_output_dir    : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment
+2026-05-17 19:46:16 | INFO | actual_output_dir       : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment
+2026-05-17 19:46:16 | INFO | 
+2026-05-17 19:46:16 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:16 | INFO | DATE BATCH PLAN
+2026-05-17 19:46:16 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:16 | INFO | count      : 5
+2026-05-17 19:46:16 | INFO | batch_days : 7
+2026-05-17 19:46:17 | INFO | Run request manifest written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/_run_request.json
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ================================================================================================
+2026-05-17 19:46:17 | INFO | RAW DATA COLLECTION
+2026-05-17 19:46:17 | INFO | ================================================================================================
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 1/2 | DATE BATCH 1/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-01-00 -> 2026-05-07-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-01-00 -> 2026-05-14-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 58874
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.04
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 1/2 | DATE BATCH 2/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-08-00 -> 2026-05-14-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-08-00 -> 2026-05-21-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 63795
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.03
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 1/2 | DATE BATCH 3/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-15-00 -> 2026-05-21-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-15-00 -> 2026-05-28-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 27839
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.01
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 1/2 | DATE BATCH 4/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-22-00 -> 2026-05-28-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-22-00 -> 2026-06-04-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 0
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.00
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 1/2 | DATE BATCH 5/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-29-00 -> 2026-05-30-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-29-00 -> 2026-06-06-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 0
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.01
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_0_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 2/2 | DATE BATCH 1/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-01-00 -> 2026-05-07-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-01-00 -> 2026-05-14-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 64315
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.03
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_0_2026-05-01_2026-05-07.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 2/2 | DATE BATCH 2/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-08-00 -> 2026-05-14-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-08-00 -> 2026-05-21-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 67249
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.03
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_1_2026-05-08_2026-05-14.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 2/2 | DATE BATCH 3/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-15-00 -> 2026-05-21-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-15-00 -> 2026-05-28-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 27201
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.01
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_2_2026-05-15_2026-05-21.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 2/2 | DATE BATCH 4/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-22-00 -> 2026-05-28-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-22-00 -> 2026-06-04-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 0
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.00
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_3_2026-05-22_2026-05-28.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH 2/2 | DATE BATCH 5/5
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | dimensions           : wait
+2026-05-17 19:46:17 | INFO | goal_type            : CPA
+2026-05-17 19:46:17 | INFO | include_country_code : True
+2026-05-17 19:46:17 | INFO | bid_window           : 2026-05-29-00 -> 2026-05-30-23
+2026-05-17 19:46:17 | INFO | event_window         : 2026-05-29-00 -> 2026-06-06-23
+2026-05-17 19:46:17 | INFO | output_csv           : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH CACHE HIT
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | Existing raw batch CSV found. Skipping query execution and reusing /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | 
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | BATCH COMPLETE
+2026-05-17 19:46:17 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:17 | INFO | rows              : 0
+2026-05-17 19:46:17 | INFO | runtime_seconds   : 0.00
+2026-05-17 19:46:17 | INFO | output_csv        : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/raw_batches/cpa_wait_2026-05-01_2026-05-30_campaign_batch_1_date_batch_4_2026-05-29_2026-05-30.csv
+2026-05-17 19:46:17 | INFO | used_existing_csv : True
+2026-05-17 19:46:18 | INFO | 
+2026-05-17 19:46:18 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:18 | INFO | RAW DATA WRITTEN
+2026-05-17 19:46:18 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:18 | INFO | rows : 309273
+2026-05-17 19:46:18 | INFO | file : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_raw.csv
+2026-05-17 19:46:18 | INFO | 
+2026-05-17 19:46:18 | INFO | ================================================================================================
+2026-05-17 19:46:18 | INFO | ANALYSIS
+2026-05-17 19:46:18 | INFO | ================================================================================================
+2026-05-17 19:46:18 | INFO | Removed single-segment campaigns | count=3
+2026-05-17 19:46:19 | INFO | Analysis complete | raw_rows=309273 | paid_rows=258730 | segments=34580 | flagged_segments=62 | flagged_campaigns=38
+2026-05-17 19:46:19 | INFO | 
+2026-05-17 19:46:19 | INFO | ================================================================================================
+2026-05-17 19:46:19 | INFO | OUTPUT WRITES
+2026-05-17 19:46:19 | INFO | ================================================================================================
+2026-05-17 19:46:20 | INFO | Output written | name=segments | rows=34580 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_segments.csv
+2026-05-17 19:46:20 | INFO | Output written | name=experiment_segments | rows=62 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_experiment_segments.csv
+2026-05-17 19:46:20 | INFO | Output written | name=experiment_campaigns | rows=38 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_experiment_campaigns.csv
+2026-05-17 19:46:20 | INFO | Output written | name=weekly_summary | rows=3 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_weekly_summary.csv
+2026-05-17 19:46:20 | INFO | Output written | name=worst_campaign_segment_summary | rows=2817 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_worst_campaign_segment_summary.csv
+2026-05-17 19:46:20 | INFO | Output written | name=threshold_backtest | rows=216 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_threshold_backtest.csv
+2026-05-17 19:46:20 | INFO | Output written | name=recommended_thresholds | rows=1 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_recommended_thresholds.csv
+2026-05-17 19:46:20 | INFO | Output written | name=run_summary | rows=1 | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_run_summary.csv
+2026-05-17 19:46:20 | INFO | Config written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/cpa_wait_2026-05-01_2026-05-30_config.json
+2026-05-17 19:46:20 | INFO | 
+2026-05-17 19:46:20 | INFO | ================================================================================================
+2026-05-17 19:46:20 | INFO | VISUALIZATIONS
+2026-05-17 19:46:20 | INFO | ================================================================================================
+2026-05-17 19:46:20 | INFO | Visualization written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/visualizations/cpa_wait_2026-05-01_2026-05-30_weekly_spend_vs_events.png
+2026-05-17 19:46:22 | INFO | Visualization written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/visualizations/cpa_wait_2026-05-01_2026-05-30_top_campaign_segment_shares.png
+2026-05-17 19:46:22 | INFO | Visualization written | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/visualizations/cpa_wait_2026-05-01_2026-05-30_spend_share_vs_event_share_scatter.png
+2026-05-17 19:46:22 | INFO | Visualization export complete | count=3 | dir=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/visualizations
+2026-05-17 19:46:22 | INFO | 
+2026-05-17 19:46:22 | INFO | ================================================================================================
+2026-05-17 19:46:22 | INFO | REPORT
+2026-05-17 19:46:22 | INFO | ================================================================================================
+2026-05-17 19:46:22 | INFO | Experiment report written | markdown=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/reports/cpa_wait_2026-05-01_2026-05-30_experiment_report.md | html=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/reports/cpa_wait_2026-05-01_2026-05-30_experiment_report.html
+2026-05-17 19:46:22 | INFO | Google Docs import source ready | use Google Drive native import on the HTML file for doc creation | file=/Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment/reports/cpa_wait_2026-05-01_2026-05-30_experiment_report.html
+2026-05-17 19:46:22 | INFO | 
+2026-05-17 19:46:22 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:22 | INFO | RUN COMPLETE
+2026-05-17 19:46:22 | INFO | ------------------------------------------------------------------------------------------------
+2026-05-17 19:46:22 | INFO | output_dir : /Users/saurav.purva/Desktop/jampp_dev/github_repos/GDS_CampaignOptimizationNotebooks_Q2_2026/result_files/spend_allocation_mvp/country_wait_cpa_experiment

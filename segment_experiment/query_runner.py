@@ -89,6 +89,25 @@ def run_or_load_raw_data(config: RunConfig, date_batches: list[DateBatch], logge
             started_at = time.perf_counter()
 
             if config.run_spend_query_flag:
+                if path.exists():
+                    log_subsection(logger, "BATCH CACHE HIT")
+                    logger.info("Existing raw batch CSV found. Skipping query execution and reusing %s", path)
+                    df = pd.read_csv(path, dtype={name: str for name in config.dimension_names})
+                    df = normalize_metric_columns(df, config.goal_type)
+                    elapsed = time.perf_counter() - started_at
+                    log_key_values(
+                        logger,
+                        "BATCH COMPLETE",
+                        {
+                            "rows": len(df),
+                            "runtime_seconds": f"{elapsed:.2f}",
+                            "output_csv": path,
+                            "used_existing_csv": True,
+                        },
+                    )
+                    frames.append(df)
+                    continue
+
                 sql = build_spend_events_sql(
                     dimension_names=config.dimension_names,
                     goal_type=config.goal_type,
@@ -129,6 +148,7 @@ def run_or_load_raw_data(config: RunConfig, date_batches: list[DateBatch], logge
                     "rows": len(df),
                     "runtime_seconds": f"{elapsed:.2f}",
                     "output_csv": path,
+                    "used_existing_csv": False,
                 },
             )
             frames.append(df)
